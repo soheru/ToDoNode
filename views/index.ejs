@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <main>
+        <% if (typeof alert !== 'undefined') { %>
+            <div class="alert"><%= alert %></div>
+        <% } %>
+        <form id="todoForm" action="/add" method="POST">
+            <input type="text" name="title" id="title" placeholder="Enter your todo...">
+            <select name="priority">
+                <option value="Low" <%= filter === "Low" ? "selected" : "" %>>Low</option>
+                <option value="Medium" <%= filter === "Medium" ? "selected" : "" %>>Medium</option>
+                <option value="High" <%= filter === "High" ? "selected" : "" %>>High</option>
+            </select>
+            <button type="submit">Add</button>
+        </form>
+        <div class="filter">
+            <form method="GET" action="/">
+                <label>Filter by priority:</label>
+                <select name="priority" onchange="this.form.submit()">
+                    <option value="">All</option>
+                    <option value="Low" <%= filter === "Low" ? "selected" : "" %>>Low</option>
+                    <option value="Medium" <%= filter === "Medium" ? "selected" : "" %>>Medium</option>
+                    <option value="High" <%= filter === "High" ? "selected" : "" %>>High</option>
+                </select>
+            </form>
+        </div>
+        <ul class="todo-list">
+            <% todos.forEach(todo => { %>
+                <li>
+                    <span class="priority <%= todo.priority %>"><%= todo.priority %></span>
+                    <span class="title"><%= todo.title %></span>
+                    <a href="/edit/<%= todo.id %>">Edit</a>
+                    <form action="/delete/<%= todo.id %>" method="POST" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+    </main>
+    <%- include('partials/footer') %>
+    <script src="/js/main.js"></script>
+</body>
+</html>
